@@ -1,0 +1,552 @@
+package ze;
+
+import co.hyperverge.hypersnapsdk.utils.AppConstants;
+import com.facebook.react.views.progressbar.ReactProgressBarViewManager;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import u5.C4870a;
+
+/* loaded from: classes3.dex */
+public class r implements v {
+
+    /* renamed from: b, reason: collision with root package name */
+    public static final r f45985b = new r();
+
+    /* renamed from: a, reason: collision with root package name */
+    private ConcurrentMap f45986a = new ConcurrentHashMap();
+
+    public r() {
+        c(null);
+        l(null);
+        f(null);
+        e(null);
+        i(null);
+        g(null);
+        b(null);
+        d(null);
+        m(null);
+        h(null);
+        k(null);
+    }
+
+    @Override // ze.v
+    public C a(String str) {
+        if (str == null) {
+            return null;
+        }
+        return (C) this.f45986a.get(str.toLowerCase());
+    }
+
+    public void b(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.required;
+        n nVar = n.any;
+        j("ins", new C("ins", mVar, enumC5279d, false, false, false, jVar, nVar));
+        j("del", new C("del", mVar, enumC5279d, false, false, false, jVar, nVar));
+    }
+
+    public void c(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.required;
+        n nVar = n.block;
+        C c11 = new C("svg", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c11.d("animate,animateMotion,animateTransform,discard,set,desc,title,metadata,linearGradient,radialGradient,pattern,circle,ellipse,line,path,polygon,polyline,rect,defs,g,svg,symbol,use,a,audio,canvas,clipPath,filter,foreignObject,iframe,image,marker,mask,script,style,switch,text,video,view");
+        c11.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c11.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c11.C("http://www.w3.org/2000/svg");
+        c11.D("svg");
+        j("svg", c11);
+        C c12 = new C("math", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c12.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c12.f("math,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c12.C("http://www.w3.org/1998/Math/MathML");
+        c12.D("mathml");
+        j("math", c12);
+    }
+
+    public void d(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.required;
+        n nVar = n.inline;
+        C c11 = new C("meter", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c11.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        c11.f("meter");
+        j("meter", c11);
+        n nVar2 = n.block;
+        C c12 = new C("form", mVar, enumC5279d, false, false, true, jVar, nVar2);
+        c12.i("form");
+        c12.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c12.f("option,optgroup,textarea,select,fieldset,p,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("form", c12);
+        m mVar2 = m.none;
+        j jVar2 = j.forbidden;
+        C c13 = new C("input", mVar2, enumC5279d, false, false, false, jVar2, nVar);
+        c13.f("select,optgroup,option");
+        j("input", c13);
+        C c14 = new C("textarea", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c14.f("select,optgroup,option");
+        j("textarea", c14);
+        C c15 = new C("select", mVar, enumC5279d, false, false, true, jVar, nVar);
+        c15.d("option,optgroup");
+        c15.f("option,optgroup,select");
+        j("select", c15);
+        C c16 = new C("option", m.text, enumC5279d, false, false, true, j.optional, nVar);
+        c16.h("select,datalist");
+        c16.f("option");
+        j("option", c16);
+        C c17 = new C("optgroup", mVar, enumC5279d, false, false, true, jVar, nVar);
+        c17.h("select");
+        c17.d("option");
+        c17.f("optgroup");
+        j("optgroup", c17);
+        n nVar3 = n.any;
+        C c18 = new C("button", mVar, enumC5279d, false, false, false, jVar, nVar3);
+        c18.f("select,optgroup,option");
+        j("button", c18);
+        j("label", new C("label", mVar, enumC5279d, false, false, false, jVar, nVar));
+        C c19 = new C("legend", mVar, enumC5279d, false, false, false, jVar, nVar2);
+        c19.k("fieldset");
+        c19.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("legend", c19);
+        C c20 = new C("fieldset", mVar, enumC5279d, false, false, false, jVar, nVar2);
+        c20.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c20.f("p,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("fieldset", c20);
+        C c21 = new C(ReactProgressBarViewManager.PROP_PROGRESS, mVar, enumC5279d, false, false, false, jVar, nVar3);
+        c21.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        c21.f(ReactProgressBarViewManager.PROP_PROGRESS);
+        j(ReactProgressBarViewManager.PROP_PROGRESS, c21);
+        C c22 = new C("datalist", mVar, enumC5279d, false, false, false, jVar, nVar3);
+        c22.d("option");
+        c22.f("datalist");
+        j("datalist", c22);
+        j("keygen", new C("keygen", mVar, enumC5279d, false, false, false, jVar2, nVar3));
+        C c23 = new C("output", mVar, enumC5279d, false, false, false, jVar, nVar3);
+        c23.f("output,p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("output", c23);
+    }
+
+    public void e(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.required;
+        n nVar = n.block;
+        C c11 = new C("div", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c11.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c11.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("div", c11);
+        C c12 = new C("figure", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c12.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c12.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("figure", c12);
+        C c13 = new C("figcaption", mVar, enumC5279d, false, false, false, jVar, n.any);
+        c13.k("figure");
+        j("figcaption", c13);
+        C c14 = new C("p", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c14.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c14.f("p,address,summary,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml,time");
+        j("p", c14);
+        C c15 = new C("pre", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c15.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c15.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("pre", c15);
+        C c16 = new C("ul", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c16.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c16.f("dl,p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c16.d("li,ul,ol,div");
+        c16.E("li");
+        j("ul", c16);
+        C c17 = new C("ol", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c17.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c17.f("dl,p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c17.d("li,ul,ol,div");
+        c17.E("li");
+        j("ol", c17);
+        j jVar2 = j.optional;
+        C c18 = new C("li", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c18.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c18.f("li,p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c18.k("ol,menu,ul");
+        j("li", c18);
+        C c19 = new C("dl", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c19.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c19.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c19.d("dt,dd,div,script,template");
+        c19.E("div");
+        j("dl", c19);
+        C c20 = new C("dt", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c20.f("dt,dd");
+        c20.d("a,abbr,address,area,article,aside,audio,b,bdi,bdo,blockquote,br,button,canvas,cite,code,data,datalist,del,dfn,div,dl,em,embed,fieldset,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,i,iframe,img,input,ins,kbd,keygen,label,main,map,mark,math,meter,nav,noscript,object,ol,output,p,pre,progress,q,ruby,s,samp,script,section,select,small,span,strong,sub,sup,svg,table,template,textarea,time,u,ul,var,video,wbr,text");
+        c20.k("dl");
+        j("dt", c20);
+        C c21 = new C("dd", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c21.f("dt,dd");
+        c21.d("a,abbr,address,area,article,aside,audio,b,bdi,bdo,blockquote,br,button,canvas,cite,code,data,datalist,del,dfn,div,dl,em,embed,fieldset,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,i,iframe,img,input,ins,kbd,keygen,label,main,map,mark,math,meter,nav,noscript,object,ol,output,p,pre,progress,q,ruby,s,samp,script,section,select,small,span,strong,sub,sup,svg,table,template,textarea,time,u,ul,var,video,wbr,text");
+        c21.k("dl");
+        j("dd", c21);
+        C c22 = new C("hr", m.none, enumC5279d, false, false, false, j.forbidden, nVar);
+        c22.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c22.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("hr", c22);
+        C c23 = new C("blockquote", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c23.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c23.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("blockquote", c23);
+    }
+
+    public void f(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.required;
+        n nVar = n.block;
+        C c11 = new C(AppConstants.DETAILS, mVar, enumC5279d, false, false, false, jVar, nVar);
+        c11.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c11.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j(AppConstants.DETAILS, c11);
+        C c12 = new C(AppConstants.SUMMARY, mVar, enumC5279d, false, false, false, jVar, nVar);
+        c12.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c12.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c12.k(AppConstants.DETAILS);
+        c12.i(AppConstants.SUMMARY);
+        j(AppConstants.SUMMARY, c12);
+        C c13 = new C("command", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c13.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c13.i("command");
+        c13.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("command", c13);
+        C c14 = new C("menu", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c14.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c14.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c14.d("menuitem,li");
+        j("menu", c14);
+        C c15 = new C("menuitem", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c15.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c15.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c15.k("menu");
+        j("menuitem", c15);
+        C c16 = new C("dialog", mVar, enumC5279d, false, false, false, jVar, n.any);
+        c16.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("dialog", c16);
+    }
+
+    public void g(C c10) {
+        m mVar = m.none;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.forbidden;
+        j("img", new C("img", mVar, enumC5279d, false, false, false, jVar, n.inline));
+        m mVar2 = m.all;
+        j jVar2 = j.required;
+        n nVar = n.any;
+        j("iframe", new C("iframe", mVar2, enumC5279d, false, false, false, jVar2, nVar));
+        C c11 = new C("embed", mVar, enumC5279d, false, false, false, jVar, n.block);
+        c11.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c11.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("embed", c11);
+        j("object", new C("object", mVar2, enumC5279d, false, false, false, jVar2, nVar));
+        n nVar2 = n.none;
+        C c12 = new C("param", mVar, enumC5279d, false, false, false, jVar, nVar2);
+        c12.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c12.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c12.k("object");
+        j("param", c12);
+        C c13 = new C("audio", mVar2, enumC5279d, false, false, false, jVar2, nVar);
+        c13.g("audio,video,object,source");
+        j("audio", c13);
+        C c14 = new C("picture", mVar2, enumC5279d, false, false, false, jVar2, nVar);
+        c14.g("audio,video,object,source");
+        j("picture", c14);
+        C c15 = new C("video", mVar2, enumC5279d, false, false, false, jVar2, nVar);
+        c15.g("audio,video,object,source");
+        j("video", c15);
+        C c16 = new C("source", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c16.k("audio,video,object");
+        j("source", c16);
+        C c17 = new C("track", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c17.k("audio,video,object,source");
+        j("track", c17);
+        j("canvas", new C("canvas", mVar2, enumC5279d, false, false, false, jVar2, nVar));
+        C c18 = new C("area", mVar, enumC5279d, false, false, false, jVar, nVar2);
+        c18.h("map");
+        c18.f("area");
+        j("area", c18);
+        C c19 = new C("map", mVar2, enumC5279d, false, false, false, jVar2, nVar);
+        c19.f("map");
+        c19.d("area");
+        j("map", c19);
+    }
+
+    public void h(C c10) {
+        m mVar = m.none;
+        EnumC5279d enumC5279d = EnumC5279d.HEAD_AND_BODY;
+        j jVar = j.forbidden;
+        n nVar = n.none;
+        j("meta", new C("meta", mVar, enumC5279d, false, false, false, jVar, nVar));
+        j("link", new C("link", mVar, enumC5279d, false, false, false, jVar, nVar));
+        m mVar2 = m.text;
+        EnumC5279d enumC5279d2 = EnumC5279d.HEAD;
+        j jVar2 = j.required;
+        j("title", new C("title", mVar2, enumC5279d2, false, true, false, jVar2, nVar));
+        j("style", new C("style", mVar2, enumC5279d, false, false, false, jVar2, nVar));
+        j("base", new C("base", mVar, enumC5279d2, false, false, false, jVar, nVar));
+    }
+
+    public void i(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.required;
+        n nVar = n.inline;
+        C c11 = new C("em", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c11.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("em", c11);
+        C c12 = new C("strong", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c12.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("strong", c12);
+        C c13 = new C("small", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c13.g("b,u,i,sub,sup,blink,s");
+        c13.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("small", c13);
+        C c14 = new C("s", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c14.g("b,u,i,sub,sup,small,blink");
+        c14.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("s", c14);
+        C c15 = new C(C4870a.f43493a, mVar, enumC5279d, false, false, false, jVar, nVar);
+        c15.f(C4870a.f43493a);
+        j(C4870a.f43493a, c15);
+        m mVar2 = m.none;
+        j jVar2 = j.forbidden;
+        n nVar2 = n.none;
+        C c16 = new C("wbr", mVar2, enumC5279d, false, false, false, jVar2, nVar2);
+        c16.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("wbr", c16);
+        C c17 = new C("mark", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c17.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("mark", c17);
+        C c18 = new C("bdi", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c18.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("bdi", c18);
+        C c19 = new C("time", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c19.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("time", c19);
+        C c20 = new C("data", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c20.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c20.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("data", c20);
+        C c21 = new C("cite", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c21.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("cite", c21);
+        C c22 = new C("q", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c22.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("q", c22);
+        C c23 = new C(AppConstants.RETAKE_ERROR_CODE, mVar, enumC5279d, false, false, false, jVar, nVar);
+        c23.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j(AppConstants.RETAKE_ERROR_CODE, c23);
+        j("span", new C("span", mVar, enumC5279d, false, false, false, jVar, nVar));
+        C c24 = new C("bdo", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c24.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("bdo", c24);
+        C c25 = new C("dfn", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c25.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("dfn", c25);
+        C c26 = new C("kbd", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c26.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("kbd", c26);
+        C c27 = new C("abbr", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c27.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("abbr", c27);
+        C c28 = new C("var", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c28.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("var", c28);
+        C c29 = new C("samp", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c29.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("samp", c29);
+        j("br", new C("br", mVar2, enumC5279d, false, false, false, jVar2, nVar2));
+        C c30 = new C("sub", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c30.g("b,u,i,sup,small,blink,s");
+        c30.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("sub", c30);
+        C c31 = new C("sup", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c31.g("b,u,i,sub,small,blink,s");
+        c31.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("sup", c31);
+        C c32 = new C("b", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c32.g("u,i,sub,sup,small,blink,s");
+        c32.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("b", c32);
+        C c33 = new C("i", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c33.g("b,u,sub,sup,small,blink,s");
+        c33.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("i", c33);
+        C c34 = new C("u", mVar, enumC5279d, true, false, false, jVar, nVar);
+        c34.g("b,i,sub,sup,small,blink,s");
+        c34.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("u", c34);
+        C c35 = new C("ruby", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c35.d("rt,rp,rb,rtc");
+        j("ruby", c35);
+        j jVar3 = j.optional;
+        C c36 = new C("rtc", mVar, enumC5279d, false, false, false, jVar3, nVar);
+        c36.k("ruby");
+        c36.d("rt,a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("rtc", c36);
+        C c37 = new C("rb", mVar, enumC5279d, false, false, false, jVar3, nVar);
+        c37.k("ruby");
+        j("rb", c37);
+        m mVar3 = m.text;
+        C c38 = new C("rt", mVar3, enumC5279d, false, false, false, jVar3, nVar);
+        c38.k("ruby");
+        c38.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("rt", c38);
+        C c39 = new C("rp", mVar3, enumC5279d, false, false, false, jVar3, nVar);
+        c39.k("ruby");
+        c39.d("a,abbr,area,audio,b,bdi,bdo,br,button,canvas,cite,code,command,datalist,del,dfn,em,i,input,ins,kbd,keygen,label,link,map,mark,meta,meter,noscript,output,progress,p,ruby,samp,s,script,select,small,span,strong,sub,sup,template,textarea,time,u,var,wbr");
+        j("rp", c39);
+    }
+
+    protected void j(String str, C c10) {
+        this.f45986a.put(str, c10);
+    }
+
+    public void k(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.HEAD_AND_BODY;
+        j jVar = j.required;
+        j("script", new C("script", mVar, enumC5279d, false, false, false, jVar, n.none));
+        j("noscript", new C("noscript", mVar, enumC5279d, false, false, false, jVar, n.block));
+    }
+
+    public void l(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.required;
+        n nVar = n.block;
+        C c11 = new C("section", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c11.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c11.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("section", c11);
+        C c12 = new C("nav", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c12.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c12.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("nav", c12);
+        C c13 = new C("article", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c13.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c13.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c13.i("menu");
+        j("article", c13);
+        C c14 = new C("aside", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c14.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c14.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c14.i("menu");
+        c14.i("address");
+        j("aside", c14);
+        C c15 = new C("h1", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c15.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c15.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml,h1,h2,h3,h4,h5,h6");
+        j("h1", c15);
+        C c16 = new C("h2", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c16.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c16.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml,h1,h2,h3,h4,h5,h6");
+        j("h2", c16);
+        C c17 = new C("h3", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c17.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c17.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml,h1,h2,h3,h4,h5,h6");
+        j("h3", c17);
+        C c18 = new C("h4", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c18.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c18.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml,h1,h2,h3,h4,h5,h6");
+        j("h4", c18);
+        C c19 = new C("h5", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c19.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c19.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml,h1,h2,h3,h4,h5,h6");
+        j("h5", c19);
+        C c20 = new C("h6", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c20.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c20.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml,h1,h2,h3,h4,h5,h6");
+        j("h6", c20);
+        C c21 = new C("hgroup", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c21.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c21.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c21.d("h1,h2,h3,h4,h5,h6");
+        j("hgroup", c21);
+        C c22 = new C("header", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c22.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c22.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c22.i("menu,header,footer");
+        j("header", c22);
+        C c23 = new C("footer", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c23.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c23.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c23.i("menu,header,footer");
+        j("footer", c23);
+        C c24 = new C("main", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c24.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c24.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("main", c24);
+        C c25 = new C("address", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c25.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c25.f("p,summary,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        c25.i("address");
+        j("address", c25);
+    }
+
+    public void m(C c10) {
+        m mVar = m.all;
+        EnumC5279d enumC5279d = EnumC5279d.BODY;
+        j jVar = j.required;
+        n nVar = n.block;
+        C c11 = new C("table", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c11.d("tr,tbody,thead,tfoot,col,colgroup,caption");
+        c11.e("bdo,strong,em,q,b,i,sub,sup,small,s");
+        c11.f("tr,thead,tbody,tfoot,caption,colgroup,table,p,address,label,abbr,acronym,dfn,kbd,samp,var,cite,code,param,xml");
+        j("table", c11);
+        j jVar2 = j.optional;
+        C c12 = new C("tr", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c12.h("table");
+        c12.k("tbody");
+        c12.d("td,th");
+        c12.E("td");
+        c12.j("thead,tfoot");
+        c12.f("tr,td,th,caption,colgroup");
+        j("tr", c12);
+        C c13 = new C("td", mVar, enumC5279d, false, false, false, jVar, nVar);
+        c13.h("table");
+        c13.k("tr");
+        c13.j("tr");
+        c13.f("td,th,caption,colgroup");
+        j("td", c13);
+        C c14 = new C("th", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c14.h("table");
+        c14.k("tr");
+        c14.f("td,th,caption,colgroup");
+        j("th", c14);
+        C c15 = new C("tbody", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c15.h("table");
+        c15.d("tr,form");
+        c15.f("td,th,tr,tbody,thead,tfoot,caption,colgroup");
+        j("tbody", c15);
+        C c16 = new C("thead", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c16.h("table");
+        c16.d("tr,form");
+        c16.f("td,th,tr,tbody,thead,tfoot,caption,colgroup");
+        j("thead", c16);
+        C c17 = new C("tfoot", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c17.h("table");
+        c17.d("tr,form");
+        c17.f("td,th,tr,tbody,thead,tfoot,caption,colgroup");
+        j("tfoot", c17);
+        C c18 = new C("col", m.none, enumC5279d, false, false, false, j.forbidden, nVar);
+        c18.h("colgroup");
+        j("col", c18);
+        C c19 = new C("colgroup", mVar, enumC5279d, false, false, false, jVar2, nVar);
+        c19.h("table");
+        c19.d("col");
+        c19.f("td,th,tr,tbody,thead,tfoot,caption,colgroup");
+        j("colgroup", c19);
+        C c20 = new C("caption", mVar, enumC5279d, false, false, false, jVar, n.inline);
+        c20.h("table");
+        c20.f("td,th,tr,tbody,thead,tfoot,caption,colgroup");
+        j("caption", c20);
+    }
+}

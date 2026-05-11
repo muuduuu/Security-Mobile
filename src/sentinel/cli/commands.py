@@ -118,7 +118,7 @@ async def _scan(apk_path: str, output: str | None = None) -> None:
             await engine.store.save_finding(finding)
 
         # Update engagement
-        engagement.status = "completed"
+        engagement.status = shared_state.engagement.status
         engagement.findings_count = shared_state.findings_summary()
         await engine.store.save_engagement(engagement)
 
@@ -128,9 +128,13 @@ async def _scan(apk_path: str, output: str | None = None) -> None:
 
     except Exception as e:
         console.print(f"\n[red]Scan failed: {e}[/red]")
-        engagement.status = "failed"
+        from sentinel.models.engagement import EngagementStatus
+        engagement.status = EngagementStatus.FAILED
         engagement.errors.append(str(e))
-        await engine.store.save_engagement(engagement)
+        try:
+            await engine.store.save_engagement(engagement)
+        except Exception:
+            pass
         raise
     finally:
         await engine.shutdown()
@@ -142,12 +146,13 @@ def _display_results(engagement: Engagement, findings: list) -> None:
         console.print("[green]No findings discovered.[/green]")
         return
 
-    table = Table(title=f"Findings — {engagement.package_name or 'Unknown'}")
-    table.add_column("#", style="dim", width=4)
-    table.add_column("Severity", width=10)
-    table.add_column("Category", width=35)
-    table.add_column("Title", width=60)
-    table.add_column("Source", width=8)
+    table = Table(title=f"Findings - {engagement.package_name or 'Unknown'}", show_lines=True, expand=False)
+    table.add_column("#", style="dim", justify="right", width=3)
+    table.add_column("Sev", width=8)
+    table.add_column("Category", width=25)
+    table.add_column("Title", ratio=3, min_width=30, no_wrap=False)
+    table.add_column("File", width=20, no_wrap=False)
+    table.add_column("Src", width=5)
 
     severity_colors = {
         "critical": "bold red",
@@ -158,18 +163,38 @@ def _display_results(engagement: Engagement, findings: list) -> None:
     }
 
     for i, f in enumerate(findings, 1):
-        color = severity_colors.get(f.severity, "white")
+        sev = f.severity.value if hasattr(f.severity, "value") else str(f.severity)
+        color = severity_colors.get(sev, "white")
+        src = f.source.value if hasattr(f.source, "value") else str(f.source)
+        file_info = ""
+        if f.file_path:
+            file_info = Path(f.file_path).name
+            if f.line_number:
+                file_info += f":{f.line_number}"
         table.add_row(
             str(i),
-            f"[{color}]{f.severity}[/{color}]",
+            f"[{color}]{sev}[/{color}]",
             f.category,
             f.title,
-            f.source,
+            file_info,
+            src,
         )
 
     console.print(table)
-    console.print(f"\n[bold]Total findings: {len(findings)}[/bold]")
-    console.print(f"Engagement ID: {engagement.id}")
+
+    # Summary
+    by_sev: dict[str, int] = {}
+    for f in findings:
+        sev = f.severity.value if hasattr(f.severity, "value") else str(f.severity)
+        by_sev[sev] = by_sev.get(sev, 0) + 1
+
+    summary_parts = []
+    for sev in ["critical", "high", "medium", "low", "info"]:
+        if sev in by_sev:
+            summary_parts.append(f"[{severity_colors.get(sev)}]{by_sev[sev]} {sev}[/{severity_colors.get(sev)}]")
+
+    console.print(f"\n[bold]Total: {len(findings)} findings[/bold] — {' | '.join(summary_parts)}")
+    console.print(f"Engagement ID: [dim]{engagement.id}[/dim]")
 
 
 @app.command()

@@ -44,6 +44,9 @@ output/
 reports/
 *.db
 *.sqlite3
+*_jadx/
+*_apktool/
+tools/
 
 # Sentinel workspace
 .sentinel/

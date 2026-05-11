@@ -1,0 +1,35 @@
+package Q6;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+/* loaded from: classes2.dex */
+public final class e implements Parcelable.Creator {
+    @Override // android.os.Parcelable.Creator
+    public final /* synthetic */ Object createFromParcel(Parcel parcel) {
+        int C10 = W6.b.C(parcel);
+        boolean z10 = false;
+        long j10 = 0;
+        long j11 = 0;
+        while (parcel.dataPosition() < C10) {
+            int t10 = W6.b.t(parcel);
+            int m10 = W6.b.m(t10);
+            if (m10 == 1) {
+                z10 = W6.b.n(parcel, t10);
+            } else if (m10 == 2) {
+                j11 = W6.b.x(parcel, t10);
+            } else if (m10 != 3) {
+                W6.b.B(parcel, t10);
+            } else {
+                j10 = W6.b.x(parcel, t10);
+            }
+        }
+        W6.b.l(parcel, C10);
+        return new d(z10, j10, j11);
+    }
+
+    @Override // android.os.Parcelable.Creator
+    public final /* synthetic */ Object[] newArray(int i10) {
+        return new d[i10];
+    }
+}

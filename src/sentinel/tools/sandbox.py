@@ -51,9 +51,12 @@ class SandboxExecutor:
             if pattern in full_cmd:
                 raise SandboxError(f"Blocked pattern detected: {pattern}")
 
-        # Check allowlist
+        # Check allowlist (match by command basename, not full path)
         if self.config.enabled and self.config.allowed_commands:
-            if command not in self.config.allowed_commands:
+            import os
+            cmd_basename = os.path.basename(command).replace(".bat", "").replace(".cmd", "")
+            allowed_basenames = {os.path.basename(c) for c in self.config.allowed_commands}
+            if cmd_basename not in allowed_basenames and command not in self.config.allowed_commands:
                 raise SandboxError(
                     f"Command '{command}' not in allowlist. "
                     f"Allowed: {self.config.allowed_commands}"

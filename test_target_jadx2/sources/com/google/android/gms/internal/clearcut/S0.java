@@ -1,0 +1,6 @@
+package com.google.android.gms.internal.clearcut;
+
+/* loaded from: classes2.dex */
+interface S0 {
+    R0 a(Class cls);
+}

@@ -36,6 +36,7 @@ class BaseAgent(ABC):
         event_bus: EventBus,
         shared_state: SharedState,
         agent_id: UUID | None = None,
+        llm_router: Any = None,
     ) -> None:
         self.id = agent_id or uuid4()
         self.engagement_id = engagement_id
@@ -48,6 +49,7 @@ class BaseAgent(ABC):
             state=AgentState.CREATED,
         )
         self._findings: list[Finding] = []
+        self._llm = llm_router
         self._log = logging.getLogger(f"sentinel.agent.{self.agent_type.value}")
 
     @abstractmethod

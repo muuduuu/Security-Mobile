@@ -1,0 +1,5 @@
+package com.webengage.sdk.android;
+
+/* loaded from: classes2.dex */
+public abstract /* synthetic */ class B {
+}

@@ -1,0 +1,41 @@
+package r0;
+
+import com.growwwealth.tech.R;
+
+/* renamed from: r0.c, reason: case insensitive filesystem */
+/* loaded from: classes.dex */
+public abstract class AbstractC3966c {
+
+    /* renamed from: b, reason: collision with root package name */
+    public static int f38945b = 0;
+
+    /* renamed from: c, reason: collision with root package name */
+    public static int f38946c = 1;
+
+    /* renamed from: e, reason: collision with root package name */
+    public static int f38948e = 0;
+
+    /* renamed from: f, reason: collision with root package name */
+    public static int f38949f = 1;
+
+    /* renamed from: g, reason: collision with root package name */
+    public static int f38950g = 2;
+
+    /* renamed from: h, reason: collision with root package name */
+    public static int f38951h = 3;
+
+    /* renamed from: i, reason: collision with root package name */
+    public static int f38952i = 4;
+
+    /* renamed from: j, reason: collision with root package name */
+    public static int f38953j = 5;
+
+    /* renamed from: k, reason: collision with root package name */
+    public static int f38954k = 6;
+
+    /* renamed from: a, reason: collision with root package name */
+    public static int[] f38944a = {R.attr.keylines, R.attr.statusBarBackground};
+
+    /* renamed from: d, reason: collision with root package name */
+    public static int[] f38947d = {android.R.attr.layout_gravity, R.attr.layout_anchor, R.attr.layout_anchorGravity, R.attr.layout_behavior, R.attr.layout_dodgeInsetEdges, R.attr.layout_insetEdge, R.attr.layout_keyline};
+}

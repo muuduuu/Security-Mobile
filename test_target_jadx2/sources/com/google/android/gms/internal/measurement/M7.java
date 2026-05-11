@@ -1,0 +1,8 @@
+package com.google.android.gms.internal.measurement;
+
+/* loaded from: classes2.dex */
+public interface M7 {
+    boolean zza();
+
+    boolean zzb();
+}

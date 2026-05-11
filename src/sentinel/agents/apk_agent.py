@@ -75,13 +75,28 @@ class APKAgent(BaseAgent):
             from sentinel.core.config import SandboxConfig
 
             sandbox = SandboxExecutor(SandboxConfig())
-            jadx = JADXTool(sandbox)
+
+            # Try bundled JADX, then system JADX
+            project_root = Path(__file__).resolve().parents[3]  # src/sentinel/agents → root
+            import platform
+            jadx_bin = "jadx.bat" if platform.system() == "Windows" else "jadx"
+            bundled_jadx = str(project_root / "tools" / "jadx" / "bin" / jadx_bin)
+            jadx_path = bundled_jadx if Path(bundled_jadx).exists() else jadx_bin
+
+            jadx = JADXTool(sandbox, jadx_path=jadx_path)
             if jadx.is_available():
-                result = await jadx.decompile(apk_path)
-                if result.success:
-                    jadx_dir = str(apk.parent / f"{apk.stem}_jadx")
+                self._log.info(f"Decompiling with JADX from: {jadx_path}")
+                jadx_dir = str(apk.parent / f"{apk.stem}_jadx")
+                result = await jadx.decompile(apk_path, output_dir=jadx_dir)
+                # JADX may return non-zero for non-critical errors, check output exists
+                if Path(jadx_dir).exists() and (Path(jadx_dir) / "sources").exists():
                     await self.state.set_artifact("jadx_output_dir", jadx_dir)
                     self._log.info(f"JADX output: {jadx_dir}")
+                elif result.success:
+                    await self.state.set_artifact("jadx_output_dir", jadx_dir)
+                    self._log.info(f"JADX output: {jadx_dir}")
+                else:
+                    self._log.warning(f"JADX decompilation produced no output")
         except Exception as e:
             self._log.warning(f"JADX decompilation failed (non-critical): {e}")
 

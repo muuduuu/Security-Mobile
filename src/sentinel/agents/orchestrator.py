@@ -73,7 +73,7 @@ class OrchestratorAgent(BaseAgent):
             await self.state.engagement.errors.append(f"APK agent error: {e}")
 
         # Step 2: Run SAST pipeline
-        self._log.info("Phase 2: Static analysis")
+        self._log.info("Phase 2: Static analysis (SAST)")
         try:
             sast_findings = await self.spawn_subagent(
                 SASTAgent,
@@ -84,8 +84,35 @@ class OrchestratorAgent(BaseAgent):
         except Exception as e:
             self._log.error(f"SAST agent failed: {e}")
 
-        # Step 3: Correlate findings via knowledge graph
-        self._log.info(f"Phase 3: Correlating {len(all_findings)} findings")
+        # Step 3: Run DAST — API endpoint discovery and analysis
+        self._log.info("Phase 3: Dynamic analysis (DAST)")
+        try:
+            from sentinel.agents.dast_agent import DASTAgent
+            dast_findings = await self.spawn_subagent(
+                DASTAgent,
+                task="Dynamic analysis — endpoint discovery and API testing",
+            )
+            all_findings.extend(dast_findings)
+        except Exception as e:
+            self._log.error(f"DAST agent failed: {e}")
+
+        # Step 4: Runtime instrumentation (if device connected)
+        package_name = self.state.engagement.package_name
+        if package_name:
+            self._log.info("Phase 4: Runtime instrumentation")
+            try:
+                from sentinel.agents.frida_agent import FridaAgent
+                frida_findings = await self.spawn_subagent(
+                    FridaAgent,
+                    task="Runtime instrumentation and hook deployment",
+                    context={"package": package_name},
+                )
+                all_findings.extend(frida_findings)
+            except Exception as e:
+                self._log.error(f"Frida agent failed: {e}")
+
+        # Step 5: Correlate findings via knowledge graph
+        self._log.info(f"Phase 5: Correlating {len(all_findings)} findings")
         await self._correlate_findings(all_findings)
 
         # Update engagement

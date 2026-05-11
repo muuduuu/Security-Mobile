@@ -1,0 +1,8 @@
+package com.google.android.gms.internal.measurement;
+
+import android.os.IInterface;
+
+/* loaded from: classes2.dex */
+public interface B0 extends IInterface {
+    void g();
+}

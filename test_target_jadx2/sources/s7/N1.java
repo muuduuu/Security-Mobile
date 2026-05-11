@@ -1,0 +1,44 @@
+package s7;
+
+import co.hyperverge.hypersnapsdk.analytics.mixpanel.Keys;
+import t8.c;
+
+/* loaded from: classes2.dex */
+final class N1 implements t8.d {
+
+    /* renamed from: a, reason: collision with root package name */
+    static final N1 f40982a = new N1();
+
+    /* renamed from: b, reason: collision with root package name */
+    private static final t8.c f40983b;
+
+    /* renamed from: c, reason: collision with root package name */
+    private static final t8.c f40984c;
+
+    /* renamed from: d, reason: collision with root package name */
+    private static final t8.c f40985d;
+
+    static {
+        c.b a10 = t8.c.a("detectorOptions");
+        C4361f c4361f = new C4361f();
+        c4361f.a(1);
+        f40983b = a10.b(c4361f.b()).a();
+        c.b a11 = t8.c.a(Keys.ERROR_CODE);
+        C4361f c4361f2 = new C4361f();
+        c4361f2.a(2);
+        f40984c = a11.b(c4361f2.b()).a();
+        c.b a12 = t8.c.a("durationMs");
+        C4361f c4361f3 = new C4361f();
+        c4361f3.a(3);
+        f40985d = a12.b(c4361f3.b()).a();
+    }
+
+    private N1() {
+    }
+
+    @Override // t8.d
+    public final /* bridge */ /* synthetic */ void a(Object obj, Object obj2) {
+        android.support.v4.media.session.b.a(obj);
+        throw null;
+    }
+}

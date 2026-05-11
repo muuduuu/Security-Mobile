@@ -1,0 +1,30 @@
+package s7;
+
+import t8.c;
+
+/* renamed from: s7.t1, reason: case insensitive filesystem */
+/* loaded from: classes2.dex */
+final class C4460t1 implements t8.d {
+
+    /* renamed from: a, reason: collision with root package name */
+    static final C4460t1 f41443a = new C4460t1();
+
+    /* renamed from: b, reason: collision with root package name */
+    private static final t8.c f41444b;
+
+    static {
+        c.b a10 = t8.c.a("api");
+        C4361f c4361f = new C4361f();
+        c4361f.a(1);
+        f41444b = a10.b(c4361f.b()).a();
+    }
+
+    private C4460t1() {
+    }
+
+    @Override // t8.d
+    public final /* bridge */ /* synthetic */ void a(Object obj, Object obj2) {
+        android.support.v4.media.session.b.a(obj);
+        throw null;
+    }
+}
