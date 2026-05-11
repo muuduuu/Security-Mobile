@@ -1,0 +1,197 @@
+"""SAST agent — static analysis pipeline."""
+
+from __future__ import annotations
+
+import logging
+from pathlib import Path
+from typing import Any
+from uuid import uuid4
+
+from sentinel.agents.base import BaseAgent
+from sentinel.agents.registry import register_agent
+from sentinel.analysis.components import analyze_exported_components
+from sentinel.analysis.deeplinks import analyze_deep_links
+from sentinel.analysis.manifest import ManifestParser
+from sentinel.analysis.permissions import analyze_permissions
+from sentinel.analysis.secrets import SecretScanner
+from sentinel.core.events import Event
+from sentinel.models.agent import AgentType
+from sentinel.models.finding import Finding, FindingSource, Severity
+
+logger = logging.getLogger(__name__)
+
+
+@register_agent(AgentType.SAST)
+class SASTAgent(BaseAgent):
+    """Comprehensive static analysis agent.
+
+    Runs the full SAST pipeline:
+    1. Manifest analysis (permissions, exported components, deep links)
+    2. Secret scanning (API keys, credentials, tokens)
+    3. Component analysis (exported activities, services, receivers, providers)
+    4. Deep link analysis
+    """
+
+    agent_type = AgentType.SAST
+    capabilities = ["sast", "manifest_analysis", "secret_scanning", "permission_analysis"]
+
+    async def plan(self, task: str, context: dict[str, Any] | None = None) -> dict[str, Any]:
+        return {
+            "task": task,
+            "steps": [
+                "analyze_manifest",
+                "scan_permissions",
+                "scan_secrets",
+                "analyze_components",
+                "analyze_deep_links",
+            ],
+        }
+
+    async def execute(self, plan: dict[str, Any]) -> list[Finding]:
+        findings: list[Finding] = []
+
+        # Get decompiled paths from shared state
+        jadx_dir = await self.state.get_artifact("jadx_output_dir")
+        apktool_dir = await self.state.get_artifact("apktool_output_dir")
+        manifest_data = await self.state.get_metadata("manifest_data", {})
+        package_name = self.state.engagement.package_name
+
+        # Step 1: Permission analysis
+        if manifest_data.get("permissions"):
+            perm_analysis = analyze_permissions(manifest_data["permissions"])
+            for issue in perm_analysis.get("issues", []):
+                findings.append(Finding(
+                    engagement_id=self.engagement_id,
+                    title=issue["title"],
+                    description=issue["description"],
+                    severity=Severity(issue["severity"]),
+                    category=issue["category"],
+                    source=FindingSource.SAST,
+                    confidence=0.9,
+                    evidence={"permission": issue["title"], "analysis": perm_analysis},
+                    remediation=issue.get("recommendation"),
+                ))
+
+        # Step 2: Exported component analysis
+        if any([
+            manifest_data.get("exported_activities"),
+            manifest_data.get("exported_services"),
+            manifest_data.get("exported_receivers"),
+            manifest_data.get("exported_providers"),
+        ]):
+            comp_analysis = analyze_exported_components(
+                manifest_data.get("exported_activities", []),
+                manifest_data.get("exported_services", []),
+                manifest_data.get("exported_receivers", []),
+                manifest_data.get("exported_providers", []),
+            )
+            for issue in comp_analysis.get("issues", []):
+                findings.append(Finding(
+                    engagement_id=self.engagement_id,
+                    title=issue["title"],
+                    description=issue["description"],
+                    severity=Severity(issue["severity"]),
+                    category=issue["category"],
+                    source=FindingSource.SAST,
+                    confidence=0.85,
+                    evidence={"component": issue.get("component", ""), "type": issue.get("type", "")},
+                ))
+
+        # Step 3: Deep link analysis
+        if manifest_data.get("deep_links"):
+            dl_analysis = analyze_deep_links(manifest_data["deep_links"])
+            for issue in dl_analysis.get("issues", []):
+                findings.append(Finding(
+                    engagement_id=self.engagement_id,
+                    title=issue["title"],
+                    description=issue["description"],
+                    severity=Severity(issue["severity"]),
+                    category=issue["category"],
+                    source=FindingSource.SAST,
+                    confidence=0.8,
+                    evidence={"uri": issue.get("uri", ""), "component": issue.get("component", "")},
+                ))
+
+        # Step 4: Secret scanning (if jadx output available)
+        if jadx_dir and Path(jadx_dir).exists():
+            scanner = SecretScanner()
+            secrets = scanner.scan_directory(Path(jadx_dir) / "sources", max_files=3000)
+            secrets = scanner.deduplicate(secrets)
+
+            for secret in secrets:
+                findings.append(Finding(
+                    engagement_id=self.engagement_id,
+                    title=f"Hardcoded secret: {secret.type}",
+                    description=f"Potential {secret.type} found in source code",
+                    severity=self._severity_for_secret(secret),
+                    category="M2: Insecure Data Storage",
+                    source=FindingSource.SAST,
+                    confidence=secret.confidence,
+                    evidence={
+                        "type": secret.type,
+                        "value_preview": secret.value[:20] + "..." if len(secret.value) > 20 else secret.value,
+                        "file_path": secret.file_path,
+                        "line_number": secret.line_number,
+                        "line_content": secret.line_content,
+                    },
+                    file_path=secret.file_path,
+                    line_number=secret.line_number,
+                ))
+
+        # Step 5: Debug/Backup flags
+        if manifest_data.get("debuggable"):
+            findings.append(Finding(
+                engagement_id=self.engagement_id,
+                title="Application is debuggable",
+                description="android:debuggable=true in AndroidManifest.xml. Allows debugging on all devices.",
+                severity=Severity.HIGH,
+                category="M1: Platform Misuse",
+                source=FindingSource.SAST,
+                confidence=0.95,
+                evidence={"flag": "debuggable", "value": True},
+                remediation="Set android:debuggable=false in release builds.",
+            ))
+
+        if manifest_data.get("allow_backup"):
+            findings.append(Finding(
+                engagement_id=self.engagement_id,
+                title="Application allows backup",
+                description="android:allowBackup=true. ADB backup can extract app data.",
+                severity=Severity.MEDIUM,
+                category="M2: Insecure Data Storage",
+                source=FindingSource.SAST,
+                confidence=0.9,
+                evidence={"flag": "allowBackup", "value": True},
+                remediation="Set android:allowBackup=false unless explicitly needed.",
+            ))
+
+        if manifest_data.get("uses_cleartext_traffic"):
+            findings.append(Finding(
+                engagement_id=self.engagement_id,
+                title="Application uses cleartext traffic",
+                description="android:usesCleartextTraffic=true. App may send data over HTTP.",
+                severity=Severity.MEDIUM,
+                category="M3: Insecure Communication",
+                source=FindingSource.SAST,
+                confidence=0.85,
+                evidence={"flag": "usesCleartextTraffic", "value": True},
+                remediation="Disable cleartext traffic and use HTTPS for all communication.",
+            ))
+
+        self._log.info(f"SAST complete: {len(findings)} findings")
+        return findings
+
+    async def handle_event(self, event: Event) -> None:
+        pass
+
+    def _severity_for_secret(self, secret) -> Severity:
+        """Map secret type to severity."""
+        critical_types = {"private_key", "aws_access_key", "aws_secret_key"}
+        high_types = {"firebase_key", "github_token", "slack_token", "stripe_key", "sendgrid_api_key"}
+        if secret.type in critical_types:
+            return Severity.CRITICAL
+        if secret.type in high_types:
+            return Severity.HIGH
+        if secret.confidence >= 0.8:
+            return Severity.HIGH
+        return Severity.MEDIUM

@@ -1,0 +1,38 @@
+# Crypto Misuse Detection Signatures
+
+patterns:
+  - name: Weak Hash Algorithm (MD5)
+    pattern: 'MessageDigest\.getInstance\([''"]MD5[''"]\)'
+    severity: medium
+    category: M5: Insufficient Cryptography
+    description: "MD5 is cryptographically broken and should not be used for security purposes"
+
+  - name: Weak Hash Algorithm (SHA1)
+    pattern: 'MessageDigest\.getInstance\([''"]SHA-?1[''"]\)'
+    severity: medium
+    category: M5: Insufficient Cryptography
+    description: "SHA-1 is deprecated and vulnerable to collision attacks"
+
+  - name: Weak Cipher (DES)
+    pattern: 'Cipher\.getInstance\([''"].*DES.*[''"]\)'
+    severity: high
+    category: M5: Insufficient Cryptography
+    description: "DES is cryptographically weak and should not be used"
+
+  - name: Weak Cipher (ECB Mode)
+    pattern: 'Cipher\.getInstance\([''"].*/ECB/.*[''"]\)'
+    severity: high
+    category: M5: Insufficient Cryptography
+    description: "ECB mode is insecure as it does not provide semantic security"
+
+  - name: Hardcoded IV
+    pattern: 'IvParameterSpec\(\s*(?:new\s+byte\[\]|"[^"]{16}")'
+    severity: high
+    category: M5: Insufficient Cryptography
+    description: "IV should be randomly generated, not hardcoded"
+
+  - name: Insecure Random
+    pattern: 'java\.util\.Random'
+    severity: medium
+    category: M5: Insufficient Cryptography
+    description: "Use SecureRandom instead of Random for security-sensitive operations"
