@@ -95,8 +95,62 @@ class FridaAgent(BaseAgent):
         network_findings = self._parse_network_output(socket_result.output)
         findings.extend(network_findings)
 
+        # Phase 6: AI reasoning on runtime telemetry
+        if findings:
+            self._log.info("Phase 6: AI reasoning on runtime findings")
+            ai_findings = await self._ai_analyze_runtime(package, findings, engine)
+            findings.extend(ai_findings)
+
         self._log.info(f"Frida instrumentation complete: {len(findings)} runtime findings")
         return findings
+
+    async def _ai_analyze_runtime(
+        self, package: str, findings: list[Finding], engine: HookEngine
+    ) -> list[Finding]:
+        """Use LLM to reason about runtime findings and suggest deeper hooks."""
+        ai_findings: list[Finding] = []
+
+        findings_text = "\n".join(
+            f"- [{f.severity.value}] {f.title}: {f.description[:100]}"
+            for f in findings[:20]
+        )
+
+        jadx_dir = await self.state.get_artifact("jadx_output_dir")
+        class_list = ""
+        if jadx_dir:
+            from pathlib import Path
+            sources = Path(jadx_dir) / "sources"
+            if sources.exists():
+                classes = [f.stem for f in sources.rglob("*.java") if any(
+                    kw in f.stem.lower()
+                    for kw in ["auth", "login", "token", "crypto", "cipher", "secret", "api", "http", "webview"]
+                )]
+                class_list = ", ".join(classes[:30])
+
+        prompt = f"""Runtime instrumentation on {package} found:
+
+{findings_text}
+
+Interesting classes from decompiled source: {class_list}
+
+What additional hooks should we deploy? Are there exploit chains? What is the most critical next step?"""
+
+        system = "You are a mobile security expert analyzing runtime results. Focus on exploit chains."
+
+        response = await self.ask_llm(prompt, system=system)
+        if response:
+            ai_findings.append(Finding(
+                engagement_id=self.engagement_id,
+                title="AI runtime analysis: attack chain assessment",
+                description=response[:1000],
+                severity=Severity.MEDIUM,
+                category="M9: Reverse Engineering",
+                source=FindingSource.RUNTIME,
+                confidence=0.7,
+                evidence={"source": "ai_reasoning", "runtime_findings": len(findings)},
+            ))
+
+        return ai_findings
 
     async def handle_event(self, event: Event) -> None:
         pass

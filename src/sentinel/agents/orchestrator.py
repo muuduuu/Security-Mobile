@@ -115,6 +115,27 @@ class OrchestratorAgent(BaseAgent):
         self._log.info(f"Phase 5: Correlating {len(all_findings)} findings")
         await self._correlate_findings(all_findings)
 
+        # Step 6: Generate report
+        self._log.info("Phase 6: Generating security report")
+        try:
+            from sentinel.reporting.generator import ReportGenerator
+            from pathlib import Path
+            report_gen = ReportGenerator(llm_router=self._llm)
+            reports = await report_gen.generate(
+                self.state.engagement, all_findings,
+            )
+            # Save reports to workspace
+            workspace = Path.home() / ".sentinel" / "workspace" / "reports"
+            workspace.mkdir(parents=True, exist_ok=True)
+            eid = str(self.engagement_id)[:8]
+            (workspace / f"{eid}.md").write_text(reports["markdown"], encoding="utf-8")
+            (workspace / f"{eid}.json").write_text(reports["json"], encoding="utf-8")
+            (workspace / f"{eid}.sarif").write_text(reports["sarif"], encoding="utf-8")
+            await self.state.set_artifact("report_md", str(workspace / f"{eid}.md"))
+            self._log.info(f"Reports saved to {workspace}")
+        except Exception as e:
+            self._log.error(f"Report generation failed: {e}")
+
         # Update engagement
         self.state.engagement.status = EngagementStatus.COMPLETED
         from datetime import datetime

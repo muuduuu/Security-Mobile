@@ -120,9 +120,41 @@ class BaseAgent(ABC):
             engagement_id=self.engagement_id,
             event_bus=self.event_bus,
             shared_state=self.state,
+            llm_router=self._llm,
         )
         self._log.info(f"Spawning sub-agent: {child.agent_type.value}")
         return await child.run(task, context)
+
+    async def ask_llm(self, prompt: str, system: str = "") -> str:
+        """Ask the LLM a question and get a text response."""
+        if self._llm is None:
+            return ""
+        from sentinel.llm.provider import LLMMessage
+        messages = []
+        if system:
+            messages.append(LLMMessage(role="system", content=system))
+        messages.append(LLMMessage(role="user", content=prompt))
+        try:
+            resp = await self._llm.complete(messages)
+            return resp.content
+        except Exception as e:
+            self._log.warning(f"LLM call failed: {e}")
+            return ""
+
+    async def ask_llm_structured(self, prompt: str, schema: type, system: str = "") -> Any | None:
+        """Ask the LLM for structured output matching a Pydantic model."""
+        if self._llm is None:
+            return None
+        from sentinel.llm.provider import LLMMessage
+        messages = []
+        if system:
+            messages.append(LLMMessage(role="system", content=system))
+        messages.append(LLMMessage(role="user", content=prompt))
+        try:
+            return await self._llm.structured_complete(messages, schema)
+        except Exception as e:
+            self._log.warning(f"LLM structured call failed: {e}")
+            return None
 
     def _set_state(self, new_state: AgentState) -> None:
         old = self.status.state

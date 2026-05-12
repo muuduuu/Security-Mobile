@@ -101,12 +101,21 @@ async def _scan(apk_path: str, output: str | None = None) -> None:
 
     console.print("\n[bold]Starting engagement...[/bold]")
 
+    # Initialize LLM router
+    from sentinel.llm.router import LLMRouter
+    llm_router = LLMRouter(config.llm)
+    if llm_router.primary:
+        console.print(f"[dim]LLM: {llm_router.primary.name}[/dim]")
+    else:
+        console.print("[yellow]No LLM configured — running without AI reasoning[/yellow]")
+
     # Run orchestrator
     try:
         orchestrator = OrchestratorAgent(
             engagement_id=engagement.id,
             event_bus=event_bus,
             shared_state=shared_state,
+            llm_router=llm_router,
         )
         findings = await orchestrator.run(
             task="Full security assessment",
@@ -195,6 +204,33 @@ def _display_results(engagement: Engagement, findings: list) -> None:
 
     console.print(f"\n[bold]Total: {len(findings)} findings[/bold] — {' | '.join(summary_parts)}")
     console.print(f"Engagement ID: [dim]{engagement.id}[/dim]")
+    report_path = Path.home() / ".sentinel" / "workspace" / "reports" / f"{str(engagement.id)[:8]}.md"
+    if report_path.exists():
+        console.print(f"Report: [dim]{report_path}[/dim]")
+
+
+@app.command()
+def report(
+    engagement_id: str = typer.Argument(..., help="Engagement ID (first 8 chars work)"),
+    fmt: str = typer.Option("markdown", "--format", "-f", help="Output format: markdown, json, sarif"),
+) -> None:
+    """View a report from a past engagement."""
+    reports_dir = Path.home() / ".sentinel" / "workspace" / "reports"
+    ext_map = {"markdown": ".md", "json": ".json", "sarif": ".sarif"}
+    ext = ext_map.get(fmt, ".md")
+
+    # Find matching report
+    matches = list(reports_dir.glob(f"{engagement_id}*{ext}"))
+    if not matches:
+        console.print(f"[red]No {fmt} report found for engagement {engagement_id}[/red]")
+        raise typer.Exit(1)
+
+    content = matches[0].read_text(encoding="utf-8")
+    if fmt == "json" or fmt == "sarif":
+        console.print(content)
+    else:
+        from rich.markdown import Markdown
+        console.print(Markdown(content))
 
 
 @app.command()

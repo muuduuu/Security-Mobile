@@ -179,6 +179,12 @@ class SASTAgent(BaseAgent):
             ))
 
         self._log.info(f"SAST complete: {len(findings)} findings")
+
+        # Step 8: AI-powered deep code analysis on high-interest files
+        if jadx_dir and Path(jadx_dir).exists():
+            ai_findings = await self._ai_code_analysis(jadx_dir, findings)
+            findings.extend(ai_findings)
+
         return findings
 
     async def handle_event(self, event: Event) -> None:
@@ -195,3 +201,123 @@ class SASTAgent(BaseAgent):
         if secret.confidence >= 0.8:
             return Severity.HIGH
         return Severity.MEDIUM
+
+    async def _ai_code_analysis(self, jadx_dir: str, existing_findings: list[Finding]) -> list[Finding]:
+        """Use LLM to analyze suspicious Java files that regex might miss."""
+        findings: list[Finding] = []
+        sources = Path(jadx_dir) / "sources"
+        if not sources.exists():
+            return findings
+
+        # Find high-interest files (auth, crypto, network, config)
+        interesting_patterns = [
+            "**/auth/**/*.java", "**/Auth*.java", "**/Login*.java",
+            "**/crypto/**/*.java", "**/Crypto*.java", "**/Cipher*.java",
+            "**/network/**/*.java", "**/Api*.java", "**/HttpClient*.java",
+            "**/Config*.java", "**/BuildConfig.java",
+            "**/Security*.java", "**/Certificate*.java",
+            "**/SharedPreferences*.java", "**/WebView*.java",
+        ]
+
+        files_to_analyze = []
+        for pattern in interesting_patterns:
+            files_to_analyze.extend(sources.glob(pattern))
+
+        # Deduplicate and limit
+        seen = set()
+        unique_files = []
+        for f in files_to_analyze:
+            if f.name not in seen:
+                seen.add(f.name)
+                unique_files.append(f)
+        unique_files = unique_files[:15]  # Cap to avoid huge LLM calls
+
+        if not unique_files:
+            return findings
+
+        self._log.info(f"AI analyzing {len(unique_files)} high-interest files")
+
+        from sentinel.llm.prompts import SAST_SYSTEM_PROMPT, SAST_CODE_ANALYSIS_PROMPT
+
+        for java_file in unique_files:
+            try:
+                code = java_file.read_text(encoding="utf-8", errors="replace")
+            except Exception:
+                continue
+
+            # Only analyze files with actual code (skip stubs)
+            if len(code) < 100 or "class " not in code:
+                continue
+
+            # Truncate to fit in context
+            if len(code) > 3000:
+                code = code[:3000] + "\n// ... truncated"
+
+            prompt = SAST_CODE_ANALYSIS_PROMPT.format(
+                package_name=self.state.engagement.package_name,
+                file_path=str(java_file.relative_to(sources)),
+                source_code=code,
+            )
+
+            response = await self.ask_llm(prompt, system=SAST_SYSTEM_PROMPT.content)
+            if not response:
+                continue
+
+            # Parse LLM response for findings
+            ai_findings = self._parse_ai_response(response, str(java_file))
+            findings.extend(ai_findings)
+
+        if findings:
+            self._log.info(f"AI analysis found {len(findings)} additional findings")
+        return findings
+
+    def _parse_ai_response(self, response: str, file_path: str) -> list[Finding]:
+        """Parse LLM analysis response into finding objects."""
+        findings = []
+        # Simple parsing — look for severity markers in the response
+        severity_map = {"critical": Severity.CRITICAL, "high": Severity.HIGH, "medium": Severity.MEDIUM, "low": Severity.LOW}
+
+        # Split by numbered findings
+        blocks = response.split("\n\n")
+        current_title = ""
+        current_severity = Severity.INFO
+        current_desc = ""
+
+        for block in blocks:
+            block_lower = block.lower()
+            # Detect severity
+            for sev_name, sev_enum in severity_map.items():
+                if f"severity: {sev_name}" in block_lower or f"severity: **{sev_name}" in block_lower:
+                    current_severity = sev_enum
+
+            # Look for title patterns
+            if "title:" in block_lower or "finding:" in block_lower:
+                for line in block.split("\n"):
+                    if "title:" in line.lower() or "finding:" in line.lower():
+                        current_title = line.split(":", 1)[1].strip().strip("*").strip()
+
+            # Look for OWASP category
+            category = "M9: Reverse Engineering"
+            for cat in ["M1:", "M2:", "M3:", "M4:", "M5:", "M6:", "M7:", "M8:", "M9:", "M10:"]:
+                if cat in block:
+                    cat_start = block.index(cat)
+                    category = block[cat_start:cat_start + 40].split("\n")[0]
+                    break
+
+            # If we found a title, create a finding
+            if current_title and current_severity != Severity.INFO:
+                findings.append(Finding(
+                    engagement_id=self.engagement_id,
+                    title=current_title[:200],
+                    description=block.strip()[:500],
+                    severity=current_severity,
+                    category=category,
+                    source=FindingSource.SAST,
+                    confidence=0.75,
+                    evidence={"source": "ai_analysis", "file": file_path},
+                    file_path=file_path,
+                ))
+                current_title = ""
+                current_severity = Severity.INFO
+
+        return findings[:10]  # Cap findings per file
